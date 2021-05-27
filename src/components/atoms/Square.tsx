@@ -1,26 +1,20 @@
-import { VFC, useState } from "react";
-
-type dispCharType = {
-  num?: number;
-  str?: String;
-};
-const dispX: dispCharType = { str: "X" };
+import { VFC, useState, useContext } from "react";
+import { SquaresState } from "../molecules/Board";
 
 const Square: VFC<{ val: number }> = ({ val }) => {
-  const dispNum: dispCharType = { num: val };
-  const [dispChar, setDispChar] = useState<dispCharType>(dispNum);
+  const aaa = useContext(SquaresState);
+  const [dispChar, setDispChar] = useState(String(val));
+
   return (
     <button
       className="square"
       onClick={() => {
-        setDispChar(dispX);
+        aaa[val - 1] = "X";
+        setDispChar("X");
+        console.log({ aaa });
       }}
     >
-      {
-        // null を確認すると意図通りに動かない。なにかしらライフサイクルの問題と思われる。
-        // dispChar.str ? dispChar.num : "";
-        dispChar.str ?? dispChar.num
-      }
+      {dispChar}
     </button>
   );
 };

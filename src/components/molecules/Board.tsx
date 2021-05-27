@@ -1,7 +1,10 @@
+import React from "react";
 import { VFC } from "react";
 import Square from "../atoms/Square";
+var musicians: string[] = new Array(9);
+export const SquaresState = React.createContext(musicians);
 
-const Game: VFC = () => {
+const Board: VFC = () => {
   const status: String = "Next palayer: X";
   // 縦横決め打ちなので、マス目作成をcontainerに作るとよりよいかも
   return (
@@ -28,4 +31,4 @@ const Game: VFC = () => {
   );
 };
 
-export default Game;
+export default Board;
