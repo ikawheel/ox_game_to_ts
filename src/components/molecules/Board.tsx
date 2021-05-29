@@ -1,30 +1,28 @@
 import React from "react";
-import { VFC } from "react";
+import { VFC, useState } from "react";
 import Square from "../atoms/Square";
-var musicians: string[] = new Array(9);
-export const SquaresState = React.createContext(musicians);
 
 const Board: VFC = () => {
-  const status: String = "Next palayer: X";
+  const [xIsNext, setxIsNext] = useState(true);
   // 縦横決め打ちなので、マス目作成をcontainerに作るとよりよいかも
   return (
     <>
       <div>
-        <div className="status">{status}</div>
+        <div className="status">Next palayer: {xIsNext ? "x" : "○"}</div>
         <div className="board-row">
-          <Square val={1} />
-          <Square val={2} />
-          <Square val={3} />
+          <Square val={1} func={setxIsNext} />
+          <Square val={2} func={setxIsNext} />
+          <Square val={3} func={setxIsNext} />
         </div>
         <div className="board-row">
-          <Square val={4} />
-          <Square val={5} />
-          <Square val={6} />
+          <Square val={4} func={setxIsNext} />
+          <Square val={5} func={setxIsNext} />
+          <Square val={6} func={setxIsNext} />
         </div>
         <div className="board-row">
-          <Square val={7} />
-          <Square val={8} />
-          <Square val={9} />
+          <Square val={7} func={setxIsNext} />
+          <Square val={8} func={setxIsNext} />
+          <Square val={9} func={setxIsNext} />
         </div>
       </div>
     </>
