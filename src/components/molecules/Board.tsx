@@ -2,12 +2,14 @@ import React from "react";
 import { VFC, useState, useContext } from "react";
 import Square from "../atoms/Square";
 import { calculateWinner } from "../../funcs/utils";
-import { SquaresState } from "../../App";
+import { historyContext } from "../../App";
 
 const Board: VFC = () => {
   const [xIsNext, setxIsNext] = useState(true);
-  const squarState = useContext(SquaresState);
-  const winner = calculateWinner(squarState);
+  const history = useContext(historyContext);
+  const current = history[history.length - 1];
+  const squares = current.squares.slice();
+  const winner = calculateWinner(squares);
 
   let status;
   if (winner) {

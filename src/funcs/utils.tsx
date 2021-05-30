@@ -1,4 +1,4 @@
-// 勝敗判定関数
+// 勝敗判定
 export const calculateWinner = (squares: string[]): string => {
   const lines = [
     [0, 1, 2],

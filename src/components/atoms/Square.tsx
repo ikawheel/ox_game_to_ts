@@ -1,11 +1,11 @@
 import React from "react";
 import { VFC, useState, useContext } from "react";
-import { SquaresState, xIsNext } from "../../App";
+import { historyContext, xIsNext } from "../../App";
 import { calculateWinner } from "../../funcs/utils";
 
 const Square: VFC<{ val: number; setxIsNext: any }> = React.memo(
   ({ val, setxIsNext }) => {
-    const squarState = useContext(SquaresState);
+    const history = useContext(historyContext);
     const xisnext = useContext(xIsNext);
     const [dispChar, setDispChar] = useState("");
 
@@ -13,12 +13,20 @@ const Square: VFC<{ val: number; setxIsNext: any }> = React.memo(
       <button
         className="square"
         onClick={() => {
+          const current = history[history.length - 1];
+          const squares = current.squares.slice();
           // 勝敗が決まっておらず、マスが空欄なら埋めて手番交代
-          if (!calculateWinner(squarState) && !squarState[val]) {
-            squarState[val] = xisnext[0] ? "x" : "○";
-            setDispChar(squarState[val]);
+          if (!calculateWinner(squares) && !squares[val]) {
+            // クリックされたマスを埋める
+            squares[val] = xisnext[0] ? "x" : "○";
+            // 埋められた文字を表示
+            setDispChar(squares[val]);
+            // 手番を交代（手番表示用）
             setxIsNext(!xisnext[0]);
+            // 手番を交代（アプリ全体の状態参照用）
             xisnext[0] = !xisnext[0];
+            // 手順の履歴を保存
+            history.push({ squares });
           }
         }}
       >
