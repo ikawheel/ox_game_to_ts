@@ -1,18 +1,21 @@
 import React from "react";
 import { VFC, useState, useContext } from "react";
-import { historyContext, xIsNext } from "../../App";
+import { historyContext, xIsNext, STEP } from "../../App";
 import { calculateWinner } from "../../funcs/utils";
 
 const Square: VFC<{ val: number; setxIsNext: any }> = React.memo(
   ({ val, setxIsNext }) => {
-    const history = useContext(historyContext);
+    let history = useContext(historyContext);
     const xisnext = useContext(xIsNext);
+    const st = useContext(STEP);
+
     const [dispChar, setDispChar] = useState("");
 
     return (
       <button
         className="square"
         onClick={() => {
+          history = history.slice(0, st[0] + 1);
           const current = history[history.length - 1];
           const squares = current.squares.slice();
           // 勝敗が決まっておらず、マスが空欄なら埋めて手番交代
@@ -27,6 +30,8 @@ const Square: VFC<{ val: number; setxIsNext: any }> = React.memo(
             xisnext[0] = !xisnext[0];
             // 手順の履歴を保存
             history.push({ squares });
+            // 手数をカウント
+            st[0] = history.length;
           }
         }}
       >

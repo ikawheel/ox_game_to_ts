@@ -2,19 +2,28 @@ import React from "react";
 import { VFC, useState, useContext } from "react";
 import Square from "../atoms/Square";
 import { calculateWinner } from "../../funcs/utils";
-import { historyContext } from "../../App";
+import { historyContext, xIsNext, STEP } from "../../App";
 
 const Board: VFC = () => {
-  const [xIsNext, setxIsNext] = useState(true);
+  const xisnext = useContext(xIsNext);
+  const st = useContext(STEP);
   const history = useContext(historyContext);
-  const current = history[history.length - 1];
-  const squares = current.squares.slice();
-  const winner = calculateWinner(squares);
+  const [xin, setxIsNext] = useState(true);
+  const current = history[st[0]];
+  const winner = calculateWinner(current.squares.slice());
+
   const moves = history.map((step, move) => {
     const desc = move ? "Go to move #" + move : "Go to game start";
     return (
       <li key={move}>
-        <button /*onClick={/*() => this.jumpTo(move)}*/>{desc}</button>
+        <button
+          onClick={() => {
+            st[0] = move;
+            xisnext[0] = move % 2 === 0;
+          }}
+        >
+          {desc}
+        </button>
       </li>
     );
   });
@@ -23,7 +32,7 @@ const Board: VFC = () => {
   if (winner) {
     status = "勝者：" + winner;
   } else {
-    status = "次の手番: " + (xIsNext ? "X" : "O");
+    status = "次の手番: " + (xin ? "X" : "O");
   }
 
   // 縦横決め打ちなので、マス目作成をcontainerに作るとよりよいかも

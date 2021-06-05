@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { xIsNext, STEP } from "../App";
+
 // 勝敗判定
 export const calculateWinner = (squares: string[]): string => {
   const lines = [
