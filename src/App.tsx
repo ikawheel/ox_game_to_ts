@@ -1,27 +1,39 @@
 import React from "react";
 import "./App.css";
 import Game from "./components/Game";
+import { useState } from "react";
 
-//// useContextでも値変更できるように配列を利用。お行儀良いのかは不明。
-
+//// ページ全体で利用する状態の定義
 // 手順の履歴
 const arrSq: string[] = new Array(9);
 const historyArr = [{ squares: arrSq }];
 export const historyContext = React.createContext(historyArr);
 
-//// とりあえず動くように手番フラグと手のカウントを配列で記載。後で直す。
-// 手番の状態
-const arrBl: boolean[] = new Array(1);
-arrBl[0] = true;
-export const xIsNext = React.createContext(arrBl);
+type TypeGlobalData = {
+  xisNext: boolean; // xの手番かどうか
+  step: number; // 現在が何手目か
+};
 
-// 何手目か
-const arrStep: number[] = new Array(1);
-arrStep[0] = 0;
-export const STEP = React.createContext(arrStep);
+type TypeGlobalDataContext = {
+  globalData: TypeGlobalData;
+  setGlobalData: React.Dispatch<React.SetStateAction<TypeGlobalData>>;
+};
+export const GlobalDataContext = React.createContext(
+  {} as TypeGlobalDataContext
+);
+
+const initialValue: TypeGlobalData = {
+  xisNext: true,
+  step: 0,
+};
 
 function App() {
-  return <Game />;
+  const [globalData, setGlobalData] = useState(initialValue);
+  return (
+    <GlobalDataContext.Provider value={{ globalData, setGlobalData }}>
+      <Game />
+    </GlobalDataContext.Provider>
+  );
 }
 
 export default App;
