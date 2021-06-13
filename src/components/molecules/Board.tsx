@@ -1,20 +1,31 @@
 import React from "react";
-import { VFC, useState, useContext } from "react";
+import { VFC, useContext } from "react";
 import Square from "../atoms/Square";
 import { calculateWinner } from "../../funcs/utils";
-import { historyContext } from "../../App";
+// import { historyContext, xIsNext, STEP } from "../../App";
+import { GlobalDataContext } from "../../App";
 
 const Board: VFC = () => {
-  const [xIsNext, setxIsNext] = useState(true);
-  const history = useContext(historyContext);
-  const current = history[history.length - 1];
-  const squares = current.squares.slice();
-  const winner = calculateWinner(squares);
-  const moves = history.map((step, move) => {
+  const { globalData, setGlobalData } = useContext(GlobalDataContext);
+  const current = globalData.historyArr[globalData.step];
+  const winner = calculateWinner(current.squares.slice());
+
+  const moves = globalData.historyArr.map((step, move) => {
     const desc = move ? "Go to move #" + move : "Go to game start";
     return (
       <li key={move}>
-        <button /*onClick={/*() => this.jumpTo(move)}*/>{desc}</button>
+        <button
+          onClick={() => {
+            setGlobalData({
+              ...globalData,
+              xisNext: move % 2 === 0,
+              step: move,
+            });
+            globalData.historyArr.splice(globalData.step + 1, 100);
+          }}
+        >
+          {desc}
+        </button>
       </li>
     );
   });
@@ -23,7 +34,7 @@ const Board: VFC = () => {
   if (winner) {
     status = "勝者：" + winner;
   } else {
-    status = "次の手番: " + (xIsNext ? "X" : "O");
+    status = "次の手番: " + (globalData.xisNext ? "X" : "O");
   }
 
   // 縦横決め打ちなので、マス目作成をcontainerに作るとよりよいかも
@@ -32,19 +43,19 @@ const Board: VFC = () => {
       <div className="game">
         <div className="gmae-board">
           <div className="board-row">
-            <Square val={0} setxIsNext={setxIsNext} />
-            <Square val={1} setxIsNext={setxIsNext} />
-            <Square val={2} setxIsNext={setxIsNext} />
+            <Square val={0} />
+            <Square val={1} />
+            <Square val={2} />
           </div>
           <div className="board-row">
-            <Square val={3} setxIsNext={setxIsNext} />
-            <Square val={4} setxIsNext={setxIsNext} />
-            <Square val={5} setxIsNext={setxIsNext} />
+            <Square val={3} />
+            <Square val={4} />
+            <Square val={5} />
           </div>
           <div className="board-row">
-            <Square val={6} setxIsNext={setxIsNext} />
-            <Square val={7} setxIsNext={setxIsNext} />
-            <Square val={8} setxIsNext={setxIsNext} />
+            <Square val={6} />
+            <Square val={7} />
+            <Square val={8} />
           </div>
         </div>
         <div className="game-info">
