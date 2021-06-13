@@ -7,6 +7,7 @@ import { GlobalDataContext } from "../../App";
 
 const Board: VFC = () => {
   const { globalData, setGlobalData } = useContext(GlobalDataContext);
+  // const current = globalData.historyArr[globalData.step - 1 === -1 ? 0 : globalData.step - 1];
   const current = globalData.historyArr[globalData.step];
   const winner = calculateWinner(current.squares.slice());
 
@@ -16,12 +17,21 @@ const Board: VFC = () => {
       <li key={move}>
         <button
           onClick={() => {
+            globalData.historyArr.splice(move + 1, 100); // タイムマシンのための履歴削除処理。
             setGlobalData({
               ...globalData,
               xisNext: move % 2 === 0,
               step: move,
             });
-            globalData.historyArr.splice(globalData.step + 1, 100);
+
+            //// こっちで履歴配列をいじると、なぜか中身が空になって再描画時にコケる。なんで？
+            // setGlobalData({
+            //   ...globalData,
+            //   historyArr: globalData.historyArr.splice(
+            //     globalData.step + 1,
+            //     100
+            //   ),
+            // });
           }}
         >
           {desc}

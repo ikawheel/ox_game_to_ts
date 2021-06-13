@@ -11,7 +11,7 @@ const Square: VFC<{ val: number }> = React.memo(({ val }) => {
     <button
       className="square"
       onClick={() => {
-        globalData.historyArr.splice(globalData.step + 1, 100); // タイムマシンのための削除処理。配列外触って落ちるかと思ったけど、無視するようなのでこれで。
+        // globalData.historyArr.splice(globalData.step + 1, 100); // タイムマシンのための削除処理。配列外触って落ちるかと思ったけど、無視するようなのでこれで。
         const current = globalData.historyArr[globalData.historyArr.length - 1];
         const squares = current.squares.slice();
         // 勝敗が決まっておらず、マスが空欄なら埋めて手番交代
@@ -23,6 +23,7 @@ const Square: VFC<{ val: number }> = React.memo(({ val }) => {
           globalData.historyArr.push({ squares });
 
           // 配列が浅いコピーされているっぽく、上記でもpushを使っている関係で、下記を実行しなくても意図通りにデータが更新される。
+          // 再描画は手番手数のsetGlobalDataにおまかせな感じ。
           // setGlobalData({
           //   ...globalData,
           //   historyArr: globalData.historyArr,
