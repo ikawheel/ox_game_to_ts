@@ -3,15 +3,14 @@ import { VFC, useContext } from "react";
 import Square from "../atoms/Square";
 import { calculateWinner } from "../../funcs/utils";
 // import { historyContext, xIsNext, STEP } from "../../App";
-import { GlobalDataContext, historyContext } from "../../App";
+import { GlobalDataContext } from "../../App";
 
 const Board: VFC = () => {
   const { globalData, setGlobalData } = useContext(GlobalDataContext);
-  const history = useContext(historyContext);
-  const current = history[globalData.step];
+  const current = globalData.historyArr[globalData.step];
   const winner = calculateWinner(current.squares.slice());
 
-  const moves = history.map((step, move) => {
+  const moves = globalData.historyArr.map((step, move) => {
     const desc = move ? "Go to move #" + move : "Go to game start";
     return (
       <li key={move}>
@@ -22,6 +21,7 @@ const Board: VFC = () => {
               xisNext: move % 2 === 0,
               step: move,
             });
+            globalData.historyArr.splice(globalData.step + 1, 100);
           }}
         >
           {desc}
